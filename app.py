@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import calendar, urllib.request
 from bs4 import BeautifulSoup
@@ -31,11 +31,10 @@ def get_data(url):
             price = tag.find("Buy").text
             date_obj = datetime.strptime(tag["Date"], '%d.%m.%Y')
             get_code = tag["Code"]
-            #print(metal_name[int(get_code)-1])
             quotes = Quotes(price=price, date=date_obj, name=metal_name[int(get_code)-1])
             db.session.add(quotes)
             db.session.commit()
-        return print('ok')
+        return print('ok, data getting')
     except:
         return print('error')
     else:
@@ -50,14 +49,44 @@ def get_url():
 
 
 @app.route('/')
+def home():
+
+    return render_template("index.html")
+
+
+@app.route('/about')
+def about():
+
+    return render_template("about.html")
+
+
+@app.route('/quotes')
 def view():
-    #xml_url = get_url()
-    #get_data(xml_url)
     today = datetime.now()
     data_list = Quotes.query.order_by(Quotes.date).all()
-    data_last = data_list[-4:]
-    return render_template("index.html", data_list=data_list, today=today, data_last=data_last)
+    return render_template("quotes.html", data_list=data_list, today=today)
+
+
+@app.route('/dashboard', methods=['POST', 'GET'])
+def dashboard():
+    data_list = Quotes.query.order_by(Quotes.date).all()
+    if data_list == []:
+        data_list.append('id')
+    else:
+        print("The data has already been uploaded")
+
+    if request.method == "POST":
+        try:
+            db.drop_all()
+            db.create_all()
+            xml_url = get_url()
+            get_data(xml_url)
+            return redirect('/')
+        except:
+            return print('... something went wrong')
+    else:
+            return render_template("dashboard.html", data_list=data_list)
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=8081)
+    app.run(debug=True, host='0.0.0.0', port=8081)

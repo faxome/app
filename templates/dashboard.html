@@ -1,0 +1,15 @@
+{% extends 'template.html' %}
+
+{% block title %}
+Application control panel
+{% endblock %}
+
+{% block body %}
+<br><br>
+<h2>Database status</h2>
+<p>number of records: {{ data_list[-1].id }}<br>
+the data are current as of: {{ data_list[-1].date }}</p>
+<form method="post">
+    <input type="submit" class="btn btn-warning" value="Update">
+</form>
+{% endblock %}

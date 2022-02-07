@@ -1,49 +1,13 @@
 {% extends 'template.html' %}
 
 {% block title %}
-Key financial market indicators
+Metal exchange app
 {% endblock %}
 
 {% block body %}
-<H2>Accounting prices for precious metals</H2><br>
-<h4>data for the last day of trading</h4>
-
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Metal name</th>
-      <th scope="col">Price</th>
-      <th scope="col">Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for el in data_last %}
-    <tr>
-      <td>{{ el.name }}</td>
-      <td>{{ el.price }}</td>
-      <td>{{ el.date }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table><br>
-<h4>data for the current month</h4>
-<table class="table table-striped">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Metal name</th>
-      <th scope="col">Price</th>
-      <th scope="col">Date</th>
-    </tr>
-  </thead>
-
-  <tbody>
-  {% for el in data_list %}
-  <tr>
-    <td>{{ el.name }}</td>
-    <td>{{ el.price }}</td>
-    <td>{{ el.date }}</td>
-  </tr>
-  {% endfor %}
-  </tbody>
-</table>
+<H2>Metals Exchange web-application</H2><br>
+<p>The application was created as part of the completion of the thesis. The basic functionality allows you to parse data on current quotations of precious metals from the Bank of Russia website.</p>
+<div class="container">
+    <canvas id="myChart"></canvas>
+</div>
 {% endblock %}
